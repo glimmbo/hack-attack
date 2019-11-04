@@ -5,8 +5,12 @@ const io = require("socket.io")(http);
 
 app.use(express.static("public"));
 
-app.get("/", function(req, res, next) {
+app.get("/", (req, res, next) => {
   res.sendFile(__dirname + "/index.html");
+});
+
+app.get("/map", (req, res, next) => {
+  res.sendFile(__dirname + "/public/map.html");
 });
 
 // fucntion to give array of connected socket ids
@@ -19,6 +23,7 @@ io.on("connection", socket => {
     socket.on("players", () => {
         socket.emit("playersResult", connectedClients())
     })
+    socket.on("location", data => console.log(data))
 })
 
 app.listen(3000, () => {
