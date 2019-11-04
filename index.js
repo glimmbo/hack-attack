@@ -2,12 +2,15 @@ const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
+const os = require('os');
+const ifaces = os.networkInterfaces();
 
 app.use(express.static("public"));
-
 app.get("/", function(req, res, next) {
   res.sendFile(__dirname + "/index.html");
+  next();
 });
+
 
 // fucntion to give array of connected socket ids
 const connectedClients = () => {
