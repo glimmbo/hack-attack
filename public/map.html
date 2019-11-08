@@ -22,26 +22,17 @@
       crossorigin=""
     ></script>
 
-    <link rel="stylesheet" href="map.css">
+    <link rel="stylesheet" href="/map.css" />
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/socketSetup.js"></script>
 
     <title>Hack-Attack Map</title>
   </head>
 
   <body>
     <div id="map"></div>
+
+    <script src="/mapSetup.js"></script>
   </body>
-  <script>
-    const mymap = L.map("map").setView([49.279, -123.11], 13);
-    L.tileLayer(
-      "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
-      {
-        attribution:
-          'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 18,
-        id: "mapbox.streets",
-        accessToken:
-          "pk.eyJ1IjoiZ2xpbW1ibyIsImEiOiJjazFjdmYxeTIwMW9kM2JzMTVuZjUxb2o3In0.Cys3Yd0OhmEj1-BfxzVmKg"
-      }
-    ).addTo(mymap);
-  </script>
 </html>
