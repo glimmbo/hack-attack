@@ -1,3 +1,4 @@
+// DEFINING OBJECTS
 const mymap = L.map("map").fitWorld();
 const playerDot = L.divIcon({ className: "player-dot" });
 const pointDot = L.divIcon({ className: "point-dot" });
@@ -14,12 +15,15 @@ L.tileLayer(
   }
 ).addTo(mymap);
 
+// SET INITIAL VIEW
 mymap.locate({
   setView: true,
   timeout: 10000,
   enableHighAccuracy: true,
   // watch: true, // how to set update interval?
 });
+
+// CALLBACKS
 
 let approxCircle
 
@@ -39,6 +43,8 @@ function addPoint(e) {
   L.marker(e.latlng, pointDot).addTo(mymap)
   socket.emit("pointAdded", e.latlng)
 }
+
+// EVENTS
 
 mymap.on("locationfound", locFound);
 mymap.on("locationerror", locNotFound);
