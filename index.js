@@ -21,8 +21,8 @@ io.on("connection", socket => {
   });
 
   socket.on("pointAdded", data => {
-    console.log('newPoint coords:', data)
-    socket.emit("newPoint", data)
+    console.log(`${data.player} added point:`, data.point)
+    io.emit("newPoint", data)
   })
 });
 

@@ -2,6 +2,7 @@
 const mymap = L.map("map").fitWorld();
 const playerDot = L.divIcon({ className: "player-dot" });
 const pointDot = L.divIcon({ className: "point-dot" });
+const otherPointDot = L.divIcon({ className: "other-point-dot" });
 
 L.tileLayer(
   "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}",
@@ -18,30 +19,30 @@ L.tileLayer(
 // SET INITIAL VIEW
 mymap.locate({
   setView: true,
-  timeout: 10000,
-  enableHighAccuracy: true,
+  timeout: 15000,
+  enableHighAccuracy: false, // has problems with timeout on desktop?
   // watch: true, // how to set update interval?
 });
 
 // CALLBACKS
 
 let approxCircle
+let myPos
 
 function locFound(e) {
-  console.log(e)
   const radius = e.accuracy;
-  approxCircle = L.circle(e.latlng, radius).addTo(mymap);
+  mpPos = L.marker(e.latlng, {icon: playerDot}).addTo(mymap)
+  approxCircle = L.circle(e.latlng, radius).addTo(mymap)
   socket.emit("locationUpdate", e.latlng)
 }
 
 function locNotFound(e) {
   console.log(e)
-  alert(e.message)
 }
 
 function addPoint(e) {
-  L.marker(e.latlng, pointDot).addTo(mymap)
-  socket.emit("pointAdded", e.latlng)
+  L.marker(e.latlng, {icon: pointDot}).addTo(mymap)
+  socket.emit("pointAdded", {point: e.latlng, player: socket.id})
 }
 
 // EVENTS
@@ -50,8 +51,9 @@ mymap.on("locationfound", locFound);
 mymap.on("locationerror", locNotFound);
 mymap.on("click", addPoint)
 
-socket.on('newPoint', data => {
-  console.log(data)
-  L.marker(data, pointDot).addTo(mymap)
-  // mymap.setView(point)
+socket.on("newPoint", data => {
+  if (data.player !== socket.id) {
+    /*const point = */ L.marker(data.point, {icon: otherPointDot}).addTo(mymap)
+    // mymap.flyTo(point, 15)
+  }
 })
